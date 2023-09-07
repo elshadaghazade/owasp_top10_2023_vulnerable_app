@@ -44,8 +44,11 @@ export async function RequestsRateLimit(request: NextRequest) {
       requestData.lastRequestTime = Date.now()
       requestData.timeWindow = timeWindow
     } else if (requestData.count <= 0) {
-      requestData.lastRequestTime = Date.now()
-      requestData.timeWindow += 100
+      requestData.lastRequestTime = Date.now();
+
+      if (requestData.timeWindow < 30000) {
+        requestData.timeWindow += 100;
+      }
 
       return NextResponse.json(
         {},
