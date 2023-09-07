@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+
+  db_pgs:
+    image: postgres:16beta2-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_USER=owasp_user
+      - POSTGRES_PASSWORD=owasp1234
+      - POSTGRES_DB=owasp_db
+    command: postgres -c shared_buffers=1024MB -c max_connections=200
+    ports:
+      - 5433:5432
