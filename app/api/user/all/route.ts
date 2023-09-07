@@ -6,7 +6,9 @@ const prisma = new PrismaClient();
 const user = new User(prisma);
 
 const administratorsIds = [
-    3, 4, 5
+    'admin1@gmail.com',
+    'admin2@gmail.com',
+    'admin3@gmail.com'
 ];
 
 /**
@@ -31,7 +33,16 @@ export async function GET(request: NextRequest) {
     const id = await user.handleVerifyToken(token!);
 
     // SOLUTION
-    if (!administratorsIds.includes(id)) {
+    const admin = await prisma.user.findUniqueOrThrow({
+        where: {
+            id
+        },
+        select: {
+            email: true
+        }
+    });
+    
+    if (!administratorsIds.includes(admin.email)) {
         throw new Error("Forbidden");
     }
 
