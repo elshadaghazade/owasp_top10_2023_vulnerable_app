@@ -1,8 +1,16 @@
-# Medical Platform Gateway app
+# OWASP TOP10 2023
 
-Medical Platform Gateway application provides REST API and front-end using Next.js 13 framework, GRPC.
+Vulnerable app that covers some OWASP TOP10 topics/
 
 ## Usage
+
+To install all dependencies:
+
+To create a postgresql server in the docker container (But make sure on your local machine port 5433 is not used by another service)
+
+```bash
+docker-compose up -d
+```
 
 To install all dependencies:
 
@@ -10,7 +18,14 @@ To install all dependencies:
 npm install
 ```
 
-To run this application in development mode:
+To migrate all models to the database:
+
+```bash
+npx prisma migrate dev
+```
+
+
+To run the application in development mode:
 
 ```bash
 npm run dev
@@ -21,9 +36,8 @@ To run this application in production mode:
 npm run build && npm start
 ```
 
-To generate codebase documentation:
+To generate codebase documentation, all static files of documentation will be located in the docs folder after the generation process:
+
 ```bash
 npm run doc:gen
 ```
-
-After the documentation generation all doc files will be located in the "docs" folder.
