@@ -36,3 +36,5 @@ yarn-error.log*
 .env
 
 docs
+.vercel
+.env*.local

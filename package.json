@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
+    "prebuild": "prisma generate && prisma migrate reset -f",
     "build": "next build",
     "dev": "next dev",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
