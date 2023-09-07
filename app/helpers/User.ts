@@ -219,4 +219,34 @@ export class User {
       }
     });
   }
+
+  /**
+   * adds some amount of money to the balance
+   */
+
+  async addToBalance (amount: number, userId: number) {
+    const balance = await this.prisma.balance.findFirst({
+      where: {
+        user_id: userId
+      }
+    });
+
+    if (!balance) {
+      await this.prisma.balance.create({
+        data: {
+          user_id: userId,
+          amount
+        }
+      });
+    } else {
+      await this.prisma.balance.update({
+        where: {
+          id: balance.id,
+        },
+        data: {
+          amount: Number(balance.amount) + amount
+        }
+      });
+    }
+  }
 }

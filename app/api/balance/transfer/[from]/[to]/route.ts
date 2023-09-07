@@ -19,9 +19,11 @@ const user = new User(prisma);
  *      - in: path
  *        name: from
  *        type: number
+ *        required: true
  *      - in: path
  *        name: to
  *        type: number
+ *        required: true
  *      - in: query
  *        name: amount
  *        type: number
@@ -52,12 +54,13 @@ export async function GET(request: NextRequest, {params: {from, to}}: any) {
         }
     });
 
-    const balanceTo = await prisma.balance.findFirstOrThrow({
+    const balanceTo = await prisma.balance.findFirst({
         where: {
             user_id: toUserId
         },
         select: {
-            amount: true
+            amount: true,
+            id: true
         }
     });
 
@@ -70,14 +73,23 @@ export async function GET(request: NextRequest, {params: {from, to}}: any) {
         }
     });
 
-    await prisma.balance.updateMany({
-        where: {
-            user_id: toUserId
-        },
-        data: {
-            amount: Number(balanceTo.amount) + amount
-        }
-    });
+    if (balanceTo) {
+        await prisma.balance.update({
+            where: {
+                id: balanceTo.id
+            },
+            data: {
+                amount: Number(balanceTo.amount) + amount
+            }
+        });
+    } else {
+        await prisma.balance.create({
+            data: {
+                amount: amount,
+                user_id: toUserId
+            }
+        });
+    }
 
     return NextResponse.json({
         data: "OK",
