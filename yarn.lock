@@ -769,6 +769,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/bcryptjs@^2.4.3":
+  version "2.4.3"
+  resolved "https://registry.npmjs.org/@types/bcryptjs/-/bcryptjs-2.4.3.tgz"
+  integrity sha512-XTnH9E/rp51aKGsiMtQCHV/owDLW2E9QAxI7ItpWWm6Gi6XO1e4o3VuEYDma0lbitj1vNOBj05Qk8l2BYoiN4A==
+
 "@types/hast@^2.0.0":
   version "2.3.4"
   resolved "https://registry.npmjs.org/@types/hast/-/hast-2.3.4.tgz"

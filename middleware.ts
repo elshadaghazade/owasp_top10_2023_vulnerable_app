@@ -1,29 +1,21 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { isAuthenticated } from '@/lib/auth';
- 
-// Limit the middleware to paths starting with `/api/`
+import { NextRequest, NextResponse } from "next/server";
+import { SMSSendMiddleware } from "./app/middlewares/sms_send_middleware";
+import { RequestsRateLimit } from "./app/middlewares/requests_rate_limit";
+
+
+
+export async function middleware(request: NextRequest) {
+  switch (request.nextUrl.pathname) {
+    case '/api/sms/send':
+      return await SMSSendMiddleware(request);
+    default:
+      return await RequestsRateLimit(request);
+  }
+  
+}
+
 export const config = {
   matcher: [
-    '/api/hello'
+    "/api/:path+"
   ],
-}
-
-export class MyRequest extends NextRequest {
-  user_id!: number;
-}
- 
-export function middleware(request: MyRequest) {
-
-  request.user_id = 1000;
-
-  request.headers.set('aaaa', 'bbb')
-    
-  // Call our authentication function to check the request
-  // if (!isAuthenticated(request)) {
-  //   // Respond with JSON indicating an error message
-  //   return new NextResponse(
-  //     JSON.stringify({ success: false, message: 'authentication failed' }),
-  //     { status: 401, headers: { 'content-type': 'application/json' } }
-  //   )
-  // }
 }

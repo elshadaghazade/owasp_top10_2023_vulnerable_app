@@ -41,3 +41,6 @@ To generate codebase documentation, all static files of documentation will be lo
 ```bash
 npm run doc:gen
 ```
+
+## Scenario:
+1. User will be created by signup endpoint

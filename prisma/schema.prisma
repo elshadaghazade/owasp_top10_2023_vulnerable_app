@@ -16,9 +16,24 @@ model Balance {
   @@index([user_id])
 }
 
+model Report {
+  id                            Int       @id @default(autoincrement())
+  user_id                       Int
+  reported_by                   Int
+  reason                        String?   @db.VarChar(255)
+  created_at                    DateTime? @db.Timestamp(6)
+  User_Report_reported_byToUser User      @relation("Report_reported_byToUser", fields: [reported_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_Report_user_idToUser     User      @relation("Report_user_idToUser", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([reported_by])
+  @@index([user_id])
+}
+
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique(map: "User_email_idx") @db.VarChar(255)
-  password String    @db.VarChar(64)
-  Balance  Balance[]
+  id                              Int       @id @default(autoincrement())
+  email                           String    @unique(map: "User_email_idx") @db.VarChar(255)
+  password                        String    @db.VarChar(64)
+  Balance                         Balance[]
+  Report_Report_reported_byToUser Report[]  @relation("Report_reported_byToUser")
+  Report_Report_user_idToUser     Report[]  @relation("Report_user_idToUser")
 }
