@@ -206,4 +206,17 @@ export class User {
       throw strengthness;
     }
   }
+
+  /**
+   * get all users for administrator
+   */
+  async getAllUsers () {
+    return await this.prisma.user.findMany({
+      where: {},
+      select: {
+        id: true,
+        email: true
+      }
+    });
+  }
 }
