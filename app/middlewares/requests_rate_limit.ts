@@ -4,9 +4,7 @@ const requestCountByIp = new Map()
 const maxRequests = process.env.REQUESTS_RATE_LIMIT
   ? parseInt(process.env.REQUESTS_RATE_LIMIT)
   : 1
-const timeWindow = process.env.REQUESTS_RATE_LIMIT_TIME_WINDOW
-  ? parseInt(process.env.REQUESTS_RATE_LIMIT_TIME_WINDOW)
-  : 2000
+const timeWindow = process.env.REQUESTS_RATE_LIMIT_TIME_WINDOW ? parseInt(process.env.REQUESTS_RATE_LIMIT_TIME_WINDOW) : 3000;
 
 export async function RequestsRateLimit(request: NextRequest) {
   const ipAddress =
