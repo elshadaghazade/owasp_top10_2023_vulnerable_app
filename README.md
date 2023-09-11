@@ -58,7 +58,63 @@ Then add some money to the balance of each user using ```/api/balance/add``` end
 
 ### Scenario
 
-Using ```/api/balance/{uid}``` user can see it's balance and using ```/api/balance/transfer/{from}/{to}``` endpoint can send some amount of money to another user. But these endpoints are vulnerable, so that user can put any user id and withdraw money from other users' balance.
+Using ```/api/balance/{uid}``` user can see it's balance and using ```/api/balance/transfer/{from}/{to}``` endpoint can send some amount of money to another user. But these endpoints are vulnerable, so that user can see the balance of any user or to put any user id and withdraw money from that user's balance without any permission.
 
 ### How to reproduce?
-Login to the system by email user1@gmail.com. Then transfer some amount of money from the second user to the first user. Also you can see the balance of any user using it's id.
+Login to the system by email user1@gmail.com. 
+- Using the ```/api/balance/{uid}``` endpoint you can see balance of all users by replacing **{uid}** with real user id of any user in the url. 
+- Using the ```/api/balance/transfer/{from}/{to}``` endpoint you can transfer money from any user to any user by replacing **{from}** and **{to}** part with any user ids.
+
+## [API2:2023 Broken Authentication](https://owasp.org/API-Security/editions/2023/en/0xa2-broken-authentication/)
+
+### Scenario
+
+undocumented
+
+### How to reproduce?
+
+undocumented
+
+
+## [API3:2023 Broken Object Property Level Authorization](https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/)
+
+### Scenario
+
+undocumented
+
+### How to reproduce?
+
+undocumented
+
+
+## [API4:2023 Unrestricted Resource Consumption](https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/)
+
+### Scenario
+
+undocumented
+
+### How to reproduce?
+
+undocumented
+
+
+## [API5:2023 Broken Function Level Authorization](https://owasp.org/API-Security/editions/2023/en/0xa5-broken-function-level-authorization/)
+
+### Scenario
+
+undocumented
+
+### How to reproduce?
+
+undocumented
+
+
+## [API7:2023 Server Side Request Forgery](https://owasp.org/API-Security/editions/2023/en/0xa7-server-side-request-forgery/)
+
+### Scenario
+
+undocumented
+
+### How to reproduce?
+
+undocumented
