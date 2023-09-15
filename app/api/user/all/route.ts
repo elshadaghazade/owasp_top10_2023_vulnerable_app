@@ -42,9 +42,9 @@ export async function GET(request: NextRequest) {
         }
     });
 
-    // if (!administratorsIds.includes(admin.email)) {
-    //     throw new Error("Forbidden");
-    // }
+    if (!administratorsIds.includes(admin.email)) {
+        throw new Error("Forbidden");
+    }
 
     const response = await user.getAllUsers();
 

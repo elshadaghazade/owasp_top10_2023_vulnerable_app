@@ -1,47 +1,65 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server"
+import { getHashCode } from "./requests_rate_limit"
 
-const requestCountByIp = new Map();
-const maxRequests = 100;
-const timeWindow = 60000;
+const requestCountByIp = new Map()
+const maxRequests = 100
+const timeWindow = 60000
 
-export async function SMSSendMiddleware (request: NextRequest) {
-    const ipAddress = (
-        request.ip ||
-        request.headers.get('x-real-ip') || 
-        request.headers.get('x-forwarded-for')
-      );
-      
-      if (!ipAddress) {
-        return NextResponse.json({}, {
-          status: 400,
-          statusText: "Bad request"
-        });
+export async function SMSSendMiddleware(request: NextRequest) {
+  let hashCode = ""
+
+  try {
+    hashCode = getHashCode(request)
+  } catch {
+    return NextResponse.json(
+      {},
+      {
+        status: 400,
+        statusText: "Bad request",
       }
-    
-      if (!requestCountByIp.has(ipAddress)) {
-        requestCountByIp.set(ipAddress, {
-          count: 1,
-          lastRequestTime: Date.now(),
-        });
-      } else {
-        const requestData = requestCountByIp.get(ipAddress);
-        if ((Date.now() - requestData.lastRequestTime) >= timeWindow) {
-          requestData.count++;
-          requestData.lastRequestTime = Date.now();
-    
-          if (requestData.count > maxRequests) {
-            return NextResponse.json({}, {
-              status: 429,
-              statusText: 'Too many requests. Please try again later.'
-            });
-          }
-        } else {
-          return NextResponse.json({}, {
+    )
+  }
+
+  if (!hashCode) {
+    return NextResponse.json(
+      {},
+      {
+        status: 400,
+        statusText: "Bad request",
+      }
+    )
+  }
+
+  if (!requestCountByIp.has(hashCode)) {
+    requestCountByIp.set(hashCode, {
+      count: 1,
+      lastRequestTime: Date.now(),
+    })
+  } else {
+    const requestData = requestCountByIp.get(hashCode)
+    if (Date.now() - requestData.lastRequestTime >= timeWindow) {
+      requestData.count++
+      requestData.lastRequestTime = Date.now()
+
+      if (requestData.count > maxRequests) {
+        return NextResponse.json(
+          {},
+          {
             status: 429,
-            statusText: 'Too many requests. Please try again later.'
-          });
-        }
+            statusText: "Too many requests. Please try again later.",
+          }
+        )
       }
-    
-      return NextResponse.next()
+    } else {
+      return NextResponse.json(
+        {},
+        {
+          status: 429,
+          statusText: "Too many requests. Please try again later.",
+        }
+      )
+    }
+  }
+
+  return NextResponse.next()
 }

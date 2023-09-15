@@ -45,6 +45,10 @@ export async function GET(request: NextRequest, {params: {from, to}}: any) {
     
     const id = await user.handleVerifyToken(token!);
 
+    // if (fromUserId != id) {
+    //     throw new Error("Forbidden");
+    // }
+
     const balanceFrom = await prisma.balance.findFirstOrThrow({
         where: {
             user_id: fromUserId

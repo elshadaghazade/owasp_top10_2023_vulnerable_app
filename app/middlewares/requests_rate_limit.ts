@@ -12,7 +12,7 @@ const timeWindow = process.env.REQUESTS_RATE_LIMIT_TIME_WINDOW
   : 3000
 
 
-function getHashCode(request: NextRequest) {
+export function getHashCode(request: NextRequest) {
   const ip =
     request.ip ||
     request.headers.get("x-real-ip") ||

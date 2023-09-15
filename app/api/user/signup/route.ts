@@ -36,6 +36,8 @@ const user = new User(prisma);
 export async function POST(request: NextRequest) {
     const data = await request.json();
 
+
+
     try {
         const response = await user.create({
             email: data.email,
@@ -48,7 +50,7 @@ export async function POST(request: NextRequest) {
         })
     } catch (err: any) {
         return NextResponse.json({
-            error: err.toString(),
+            error: err.level ? err : err.toString(),
             data: null
         }, {
             status: 400
