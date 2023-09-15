@@ -5,8 +5,6 @@ export async function GET(request: NextRequest) {
     
     const host = request.headers.get('host')!;
 
-    console.log("AAA", request.headers);
-
     if (![
         "localhost:3000",
         "127.0.0.1:3000"
