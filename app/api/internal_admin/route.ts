@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/internal_admin:
+ *    get:
+ *     consumes:
+ *      - application/json
+ *     description: returns confidential information and can be accessed only in local network
+ *     tags:
+ *      - Admin
+ *
+ *     responses:
+ *       200:
+ *         description: some confidential information
+ */
+
 
 export async function GET(request: NextRequest) {
     
