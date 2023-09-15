@@ -7,9 +7,9 @@ import { RequestsRateLimit } from "./app/middlewares/requests_rate_limit";
 export async function middleware(request: NextRequest) {
   switch (request.nextUrl.pathname) {
     case '/api/sms/send':
-      // return await SMSSendMiddleware(request);
+      return await SMSSendMiddleware(request);
     default:
-      // return await RequestsRateLimit(request);
+      return await RequestsRateLimit(request);
   }
   
 }
