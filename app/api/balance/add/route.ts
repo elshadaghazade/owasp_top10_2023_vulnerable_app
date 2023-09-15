@@ -35,9 +35,9 @@ export async function POST(request: NextRequest) {
     const payload = await request.json();
     const amount = payload.amount;
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-    const id = await user.handleVerifyToken(token!);
+    const {id, is_admin} = await user.handleVerifyToken(token!);
 
-    await user.addToBalance(amount, id);
+    await user.addToBalance(amount, id!);
 
     return NextResponse.json({
         data: "OK",

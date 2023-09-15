@@ -36,7 +36,7 @@ export async function POST(request: NextRequest, {params: {uid}}: any) {
     const userId = Number(uid);
     const reason = request.nextUrl.searchParams.get('reason');
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-    const reportedBy = await user.handleVerifyToken(token!);
+    const {id: reportedBy, is_admin} = await user.handleVerifyToken(token!);
 
     const userInfo = await prisma.user.findUniqueOrThrow({
         where: {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest, {params: {uid}}: any) {
     await prisma.report.create({
         data: {
             user_id: userId,
-            reported_by: reportedBy,
+            reported_by: reportedBy!,
             reason
         }
     });

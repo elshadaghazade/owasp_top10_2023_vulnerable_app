@@ -5,12 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 const user = new User(prisma);
 
-const administratorsIds = [
-    'admin1@gmail.com',
-    'admin2@gmail.com',
-    'admin3@gmail.com'
-];
-
 /**
  * @swagger
  * /api/user/all:
@@ -30,21 +24,18 @@ export async function GET(request: NextRequest) {
   try {
 
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-    const id = await user.handleVerifyToken(token!);
+    const {id, is_admin} = await user.handleVerifyToken(token!);
 
     // SOLUTION
     const admin = await prisma.user.findUniqueOrThrow({
         where: {
-            id
+            id: id!,
+            is_admin: true
         },
         select: {
-            email: true
+            email: true,
         }
     });
-
-    if (!administratorsIds.includes(admin.email)) {
-        throw new Error("Forbidden");
-    }
 
     const response = await user.getAllUsers();
 

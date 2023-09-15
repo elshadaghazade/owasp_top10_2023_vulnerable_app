@@ -14,22 +14,37 @@ export class User {
   private passwordSaltRound = 10;
   constructor(private prisma: PrismaClient) {}
 
-  async create(params: {email: string, password: string}) {
+  async create(params: {email: string, password: string, is_admin: boolean}, adminId: number | null) {
     
     // this.checkPassword(params.password);
+    
+    // if (adminId) {
+    //   await this.prisma.user.findUniqueOrThrow({
+    //     where: {
+    //       id: adminId,
+    //       is_admin: true
+    //     },
+    //     select: {
+    //       id: true
+    //     }
+    //   });
+    // } else {
+    //   params.is_admin = false;
+    // }
 
     const password = bcrypt.hashSync(params.password, this.passwordSaltRound);
 
     const user = await this.prisma.user.create({
       data: {
-        email: params.email,
+        ...params,
         password
       },
     });
 
     return {
       id: user.id,
-      email: user.email
+      email: user.email,
+      is_admin: user.is_admin
     }
   }
 
@@ -49,7 +64,8 @@ export class User {
       select: {
         id: true,
         email: true,
-        password: true
+        password: true,
+        is_admin: true,
       }
     });
 
@@ -61,12 +77,12 @@ export class User {
       throw new Error("Email/Phone or Password is wrong");
     }
   
-    const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ id: user.id, is_admin: user.is_admin }, JWT_SECRET, {
       expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
       // algorithm: 'none'
     });
     
-    const refreshToken = jwt.sign({ id: user.id }, REFRESH_TOKEN_SECRET, {
+    const refreshToken = jwt.sign({ id: user.id, is_admin: user.is_admin }, REFRESH_TOKEN_SECRET, {
       expiresIn: Math.round(Date.now() / 1000) + REFRESH_TOKEN_EXPIRATION_TIME,
       // algorithm: 'none'
     });
@@ -75,7 +91,8 @@ export class User {
       accessToken,
       refreshToken,
       user: {
-        id: user.id
+        id: user.id,
+        is_admin: user.is_admin
       }
     }
   }
@@ -100,10 +117,10 @@ export class User {
     }
 
     // Retrieve the user's details from the refresh token payload
-    const { id } = decoded;
+    const { id, is_admin } = decoded;
 
     // Generate a new access token
-    const accessToken = this.generateAccessToken(id);
+    const accessToken = this.generateAccessToken(id, is_admin);
 
     return {
       accessToken,
@@ -115,14 +132,17 @@ export class User {
    * handle token verification request
    */
 
-  async handleVerifyToken (accessToken: string) {
+  async handleVerifyToken (accessToken: string): Promise<{id: number | null, is_admin: boolean | null}> {
     try {
       const payload: any = jwt.verify(accessToken, JWT_SECRET, {
         // algorithms: [
         //   'none'
         // ]
       });
-      return payload?.id;
+      return {
+        id: payload?.id,
+        is_admin: payload?.is_admin
+      };
     } catch (error) {
       throw new Error("Token is invalid or expired");
     }
@@ -148,8 +168,8 @@ export class User {
   /**
    * generate access token
    */
-  private generateAccessToken(id: number) {
-    const accessToken = jwt.sign({ id }, JWT_SECRET, {
+  private generateAccessToken(id: number, is_admin: boolean) {
+    const accessToken = jwt.sign({ id, is_admin }, JWT_SECRET, {
       expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
       // // algorithm: 'none'
     });
@@ -215,7 +235,8 @@ export class User {
       where: {},
       select: {
         id: true,
-        email: true
+        email: true,
+        is_admin: true,
       }
     });
   }

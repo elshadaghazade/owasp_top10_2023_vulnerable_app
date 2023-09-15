@@ -35,14 +35,20 @@ const user = new User(prisma);
  */
 export async function POST(request: NextRequest) {
     const data = await request.json();
+    
+    let adminId: number | null = null;
 
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+    if (token) {
+        const result = await user.handleVerifyToken(token!);
 
+        if (result.is_admin) {
+            adminId = result.id;
+        }
+    }
 
     try {
-        const response = await user.create({
-            email: data.email,
-            password: data.password
-        });
+        const response = await user.create(data, adminId);
 
         return NextResponse.json({
             data: response,
