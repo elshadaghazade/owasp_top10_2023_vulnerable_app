@@ -33,6 +33,7 @@ model User {
   id                              Int       @id @default(autoincrement())
   email                           String    @unique(map: "User_email_idx") @db.VarChar(255)
   password                        String    @db.VarChar(64)
+  is_admin                        Boolean   @default(false)
   Balance                         Balance[]
   Report_Report_reported_byToUser Report[]  @relation("Report_reported_byToUser")
   Report_Report_user_idToUser     Report[]  @relation("Report_user_idToUser")
