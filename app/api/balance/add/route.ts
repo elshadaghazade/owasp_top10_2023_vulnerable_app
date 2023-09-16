@@ -37,6 +37,10 @@ export async function POST(request: NextRequest) {
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
     const {id, is_admin} = await user.handleVerifyToken(token!);
 
+    if (amount <= 0) {
+      throw new Error("Balance should be positive number");
+    }
+
     await user.addToBalance(amount, id!);
 
     return NextResponse.json({
