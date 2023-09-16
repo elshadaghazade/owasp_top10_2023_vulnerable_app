@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 
-const JWT_SECRET = "abc"; // 228b53cd-3499-52co-967d-8601632034078
-const REFRESH_TOKEN_SECRET = "abc"; // 228b53cd-3499-52co-967d-8601632034078
+const JWT_SECRET = "228b53cd-3499-52co-967d-8601632034078";
+const REFRESH_TOKEN_SECRET = "228b53cd-3499-52co-967d-8601632034078";
 const ACCESS_TOKEN_EXPIRATION_TIME = "15m";
 const REFRESH_TOKEN_EXPIRATION_TIME = 3600;
 
