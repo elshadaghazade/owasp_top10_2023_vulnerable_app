@@ -27,15 +27,18 @@ export async function GET(request: NextRequest) {
     const {id, is_admin} = await user.handleVerifyToken(token!);
 
     // SOLUTION
-    const admin = await prisma.user.findUniqueOrThrow({
-        where: {
-            id: id!,
-            is_admin: true
-        },
-        select: {
-            email: true,
-        }
-    });
+    if (!is_admin) {
+      throw new Error("User not found");
+    }
+    // const admin = await prisma.user.findUniqueOrThrow({
+    //     where: {
+    //         id: id!,
+    //         is_admin: true
+    //     },
+    //     select: {
+    //         email: true,
+    //     }
+    // });
 
     const response = await user.getAllUsers();
 
