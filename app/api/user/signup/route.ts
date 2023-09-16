@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         })
     } catch (err: any) {
         return NextResponse.json({
-            error: err.level ? err : err.toString(),
+            error: err.level ? err : "Bad request",
             data: null
         }, {
             status: 400
