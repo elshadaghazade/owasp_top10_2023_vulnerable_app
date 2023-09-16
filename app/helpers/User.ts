@@ -14,7 +14,7 @@ export class User {
 
   async create(params: {email: string, password: string, is_admin: boolean}, adminId: number | null) {
     
-    // this.checkPassword(params.password);
+    this.checkPassword(params.password);
     
     if (adminId) {
       await this.prisma.user.findUniqueOrThrow({
