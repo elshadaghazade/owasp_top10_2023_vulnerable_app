@@ -43,11 +43,11 @@ export async function GET(request: NextRequest, {params: {from, to}}: any) {
 
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
     
-    const id = await user.handleVerifyToken(token!);
+    const {id, is_admin} = await user.handleVerifyToken(token!);
 
-    // if (fromUserId != id) {
-    //     throw new Error("Forbidden");
-    // }
+    if (fromUserId !== id) {
+        throw new Error("Forbidden");
+    }
 
     const balanceFrom = await prisma.balance.findFirstOrThrow({
         where: {

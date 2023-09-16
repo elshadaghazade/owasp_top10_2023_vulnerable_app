@@ -30,12 +30,12 @@ export async function GET(request: NextRequest, {params: {uid}}: any) {
 
     const userId = Number(uid);
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-    const id = await user.handleVerifyToken(token!);
+    const {id, is_admin} = await user.handleVerifyToken(token!);
 
     // SOLUTION
-    // if (userId !== id) {
-    //     throw new Error("Forbidden");
-    // }
+    if (userId !== id) {
+        throw new Error("Forbidden");
+    }
 
     const response = await prisma.balance.findFirstOrThrow({
         where: {
