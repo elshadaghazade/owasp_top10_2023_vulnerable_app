@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
 
         if (result.is_admin) {
             adminId = result.id;
+        } else {
+            data.is_admin = false;
         }
     }
 

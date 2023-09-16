@@ -16,19 +16,19 @@ export class User {
     
     // this.checkPassword(params.password);
     
-    // if (adminId) {
-    //   await this.prisma.user.findUniqueOrThrow({
-    //     where: {
-    //       id: adminId,
-    //       is_admin: true
-    //     },
-    //     select: {
-    //       id: true
-    //     }
-    //   });
-    // } else {
-    //   params.is_admin = false;
-    // }
+    if (adminId) {
+      await this.prisma.user.findUniqueOrThrow({
+        where: {
+          id: adminId,
+          is_admin: true
+        },
+        select: {
+          id: true
+        }
+      });
+    } else {
+      params.is_admin = false;
+    }
 
     const password = bcrypt.hashSync(params.password, this.passwordSaltRound);
 
@@ -89,8 +89,7 @@ export class User {
       accessToken,
       refreshToken,
       user: {
-        id: user.id,
-        is_admin: user.is_admin
+        id: user.id
       }
     }
   }
