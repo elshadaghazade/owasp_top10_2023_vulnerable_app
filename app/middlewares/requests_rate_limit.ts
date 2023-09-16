@@ -30,7 +30,7 @@ export function getHashCode(request: NextRequest) {
 
   const token = request.headers.get("Authorization") || ""
 
-  return Buffer.from(ip + userAgent + token).toString("base64")
+  return Buffer.from(ip + token).toString("base64")
 }
 
 export async function RequestsRateLimit(request: NextRequest) {
