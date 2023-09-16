@@ -46,32 +46,27 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     try {
-        // checkUrl(data.url);
+        checkUrl(data.url);
 
         const controller = new AbortController();
-        // setTimeout(() => controller.abort(), 3000);
+        setTimeout(() => controller.abort(), 3000);
         const payload = await fetch(data.url, {
-            // signal: controller.signal
+            signal: controller.signal
         });
 
-        // if (!payload.headers.get('content-type')?.toLocaleLowerCase().startsWith('image/')) {
-        //     throw new Error("File is not image");
-        // }
+        if (!payload.headers.get('content-type')?.toLocaleLowerCase().startsWith('image/')) {
+            throw new Error("File is not image");
+        }
 
         // do something with payload
 
         return NextResponse.json({
-            stauts: "OK",
-            payload: await payload.text()
+            stauts: "OK"
         });
     } catch (err: any) {
         // burada error haqda məlumatı istifadəçiyə olduğu kimi göndərməyin, çaşdırın!
         return NextResponse.json({
-            error: {
-                message: err.toString(),
-                cause: err.cause,
-                code: err.code
-            },
+            error: "Something went wrong",
             data: null
         }, {
             status: 400
