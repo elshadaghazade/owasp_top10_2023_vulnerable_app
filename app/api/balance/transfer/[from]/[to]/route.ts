@@ -45,7 +45,7 @@ export async function GET(request: NextRequest, {params: {from, to}}: any) {
     
     const {id, is_admin} = await user.handleVerifyToken(token!);
 
-    if (fromUserId !== id) {
+    if (fromUserId !== id || fromUserId === toUserId || amount <= 0) {
         throw new Error("Forbidden");
     }
 
