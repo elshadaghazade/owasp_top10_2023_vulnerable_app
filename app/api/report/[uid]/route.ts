@@ -38,6 +38,10 @@ export async function POST(request: NextRequest, {params: {uid}}: any) {
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
     const {id: reportedBy, is_admin} = await user.handleVerifyToken(token!);
 
+    if (reportedBy === userId) {
+        throw new Error("You cannot report yourself");
+    }
+
     const userInfo = await prisma.user.findUniqueOrThrow({
         where: {
             id: userId
@@ -58,13 +62,11 @@ export async function POST(request: NextRequest, {params: {uid}}: any) {
 
     return NextResponse.json({
         data: "OK",
-        error: {
-            ...userInfo
-        }
+        error: null
     });
   } catch (err: any) {
     return NextResponse.json({
-        error: err.toString(),
+        error: "bad request",
         data: null
     }, {
         status: 400
